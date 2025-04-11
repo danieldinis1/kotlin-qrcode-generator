@@ -8,4 +8,5 @@ class QrCodeApplication
 
 fun main(args: Array<String>) {
     runApplication<QrCodeApplication>(*args)
+    TODO("Maybe a link shortener")
 }

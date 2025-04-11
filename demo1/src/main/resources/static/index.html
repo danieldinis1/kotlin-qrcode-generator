@@ -1,31 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
 </head>
 <body>
-<h2>QR Code Generator</h2>
 <form id="qrForm">
-    <input type="text" id="urlInput" placeholder="Enter URL" required />
-    <button type="submit">Generate QR</button>
+    <label for="url">Enter URL:</label>
+    <input type="text" id="url" name="url" required>
+    <button type="submit">Generate QR Code</button>
 </form>
-<br>
-<img id="qrImage" style="display:none;" />
-<script>
-    const form = document.getElementById('qrForm');
-    const img = document.getElementById('qrImage');
+<div id="error" style="color: red;"></div>
+<div id="qrCode"></div>
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const url = document.getElementById('urlInput').value;
-        const res = await fetch('/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
-        });
-        const blob = await res.blob();
-        img.src = URL.createObjectURL(blob);
-        img.style.display = 'block';
+<script>
+    document.getElementById('qrForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const url = document.getElementById('url').value;
+        const errorDiv = document.getElementById('error');
+        const qrCodeDiv = document.getElementById('qrCode');
+        errorDiv.textContent = '';
+        qrCodeDiv.innerHTML = '';
+
+        try {
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url })
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
+
+            const blob = await response.blob();
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(blob);
+            qrCodeDiv.appendChild(img);
+        } catch (error) {
+            errorDiv.textContent = error.message;
+        }
     });
 </script>
 </body>
