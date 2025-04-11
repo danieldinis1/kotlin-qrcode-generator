@@ -8,3 +8,5 @@ data class UrlRequest(
         require(url.startsWith("http://") || url.startsWith("https://")) { "URL must start with http:// or https://" }
     }
 }
+
+//MAYBE USE java.net.URL for memory purposes?
