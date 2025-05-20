@@ -1,13 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+
+
+    /**
+     * Elementos principais da interface.
+     */
     const loginView = document.getElementById('login-view');
     const qrView = document.getElementById('qr-view');
     const loginForm = document.getElementById('loginForm');
     const logoutBtn = document.getElementById('logoutBtn');
     const loginError = document.getElementById('loginError');
     const qrImage = document.getElementById('qrImage');
-    const qrForm = document.getElementById('qrForm'); // you already have this
+    const qrForm = document.getElementById('qrForm');
 
+    /**
+     * Verifica se o usuário está autenticado ao carregar a página.
+     * Se estiver autenticado, mostra a tela de QR Code.
+     * Caso contrário, exibe a tela de login.
+     */
     async function checkAuth() {
         try {
             const res = await fetch('/me');
@@ -33,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     console.log('SCript fully loaded');
 
+    /**
+     * Lida com o envio do formulário de login.
+     * Envia os dados do usuário para o servidor e, se o login for bem-sucedido, exibe a tela de QR Code.
+     */
     loginForm.addEventListener('submit', async (e) => {
         console.log('DOM fully loaded');
         e.preventDefault();
@@ -58,6 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /**
+     * Lida com o envio do formulário para gerar QR Code.
+     * Envia a URL para o servidor e exibe o QR Code gerado.
+     */
     qrForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const url = document.getElementById('urlInput').value;
@@ -80,6 +98,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /**
+     * Lida com o clique no botão de logout.
+     * Envia a solicitação de logout para o servidor e exibe a tela de login.
+     */
     logoutBtn.addEventListener('click', async () => {
         try {
             const res = await fetch('/logout', { method: 'POST' });
@@ -94,5 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /**
+     * Chama a função para verificar a autenticação ao carregar a página.
+     */
     checkAuth();
 });
